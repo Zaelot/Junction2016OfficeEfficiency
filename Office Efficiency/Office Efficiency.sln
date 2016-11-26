@@ -1,0 +1,23 @@
+Microsoft Visual Studio Solution File, Format Version 11.00
+# Visual Studio 2008
+
+Project("{57474722-4954-1165-E066-C03C629A1AD0}") = "Office Efficiency", "Assembly-CSharp.csproj", "{FF19B668-9072-C19B-EA12-8423C07C896B}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{FF19B668-9072-C19B-EA12-8423C07C896B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FF19B668-9072-C19B-EA12-8423C07C896B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FF19B668-9072-C19B-EA12-8423C07C896B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FF19B668-9072-C19B-EA12-8423C07C896B}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(MonoDevelopProperties) = preSolution
+		StartupItem = Assembly-CSharp.csproj
+	EndGlobalSection
+EndGlobal

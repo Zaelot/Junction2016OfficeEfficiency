@@ -1,0 +1,79 @@
+///General Notes
+http://gordon.koefner.at/blog/wp-content/uploads/2013/08/unity-lifetime.png
+	* Apparently a good idea to include a bool check for active/disabled state on Coroutines, if planning on disabling the object
+If Unity crashes on startup, try deleting Library and Temp folders.
+
+///Editor Notes
+
+//Editor only:
+HideFlags.DontSaveInBuild	//Unity 5.0+
+http://docs.unity3d.com/Manual/Tags.html - EditorOnly //for gameobjects
+if(UnityEditor.EditorApplication.isPlaying)
+
+//TextMesh
+// https://chicounity3d.wordpress.com/2014/08/30/one-simple-trick-to-make-textmesh-less-pixelated/
+Scale transform to .01
+Increase font size to 100
+Increase character size to 10
+
+//UI
+Unity UI Canvas has total vertex count limit about 60 thousand vertices.
+So, for every complex illustration you would need a separate canvas.
+
+
+
+///Code Notes
+
+//if then
+Debug.Log("This is what I got from GbCoreClient: " + materialsJson != null ? materialsJson : string.Empty);
+
+//Ending CoRoutine
+yield break;
+
+//You can use "enabled" by itself in scripts
+function OnBecameVisible () {
+    	enabled = true; }
+
+//getting a script from parent
+private RainManager manager;
+	manager = transform.parent.GetComponent.<RainManager> ();
+
+//settings bounds
+private Bounds bounds;
+	bounds = new Bounds (Vector3 (transform.position.x, manager.minYPosition, transform.position.z),
+			     Vector3 (manager.areaSize * 1.35f, Mathf.Max (manager.areaSize, manager.areaHeight)  * 1.35f, manager.areaSize * 1.35f));
+
+
+//Detecting mouse on UI object
+bool EventSystem.IsPointerOverGameObject( )
+
+//Drawing RayCasts
+Debug.DrawLine (transform.position, hit.point, Color.cyan, 1.5f); //start, end, color, duration -only draws as Gizmo
+
+
+//Avoiding fast rigidbodies from skipping collisions
+contactOffset
+
+//Lerping
+// https://chicounity3d.wordpress.com/2014/05/23/how-to-lerp-like-a-pro/
+Mathf.Lerp(start, end, animationCurve.Evaluate(t)) //public AnimationCurve
+//transform.position = Vector3.Lerp(transform.position, targetPosition, 5f*Time.deltaTime); //easing in
+
+//Moving forward
+transform.position += (transform.forward * 2f);
+
+//WebGL / WebPlayer networking:
+WWW www = new WWW("http://unity6.ipt.oamk.fi:3000/tophiscore").text; //receive
+byte[] postDataByte = System.Text.Encoding.ASCII.GetBytes("dataToSend");
+Hashtable headers = new Hashtable();
+headers.Add("Content-Type", "application/json");
+WWW www= new WWW("http://unity6.ipt.oamk.fi:3000/hiscores", postDataByte, headers); //send
+
+//Repeating
+InvokeRepeating("LaunchProjectile", 2, 0.3F); //function, in seconds, repeatRate seconds
+CancelInvoke("LaunchProjectile");
+
+
+//Notes
+Unity already supports MonoBehaviour derived inheritance hierarchies, allowing you to have base references that you drag-and-drop your specific component instances onto.
+

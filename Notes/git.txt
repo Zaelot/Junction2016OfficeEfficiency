@@ -1,0 +1,160 @@
+//git
+(mkdir gitrepo)								== create dir
+git clone git://git.code.sf.net/p/motlk2013/code motlk2013-code		== clone git repo
+git remote add origin ssh://git@bitbucket.org/vogella/gitbook.git	== add remote without cloning
+git init								== creates empty repo, or activates existing
+git status								== show repo status
+git add .	//also git add --all					== add all changes
+git commit -m "paivitetty" //-a to skip git add .			== commit changes (no åäö)
+git commit --amend -C HEAD						== amend the previous commit, -C to use previous message
+git push origin master							== pushes current repo to master branch
+git pull								== get the latest repo
+git gc									== compress the files
+git clone --mirror git://example.com/some-big-repo.git			== Bare repository (no visible actual files)
+
+(git pull git://git.code.sf.net/p/motlk2013/code)			== pulls to current folder
+(git push -u origin master)						== -u sets local branch to track remote
+git branch -u origin/<branchname> <branchname>				== set local to track remote branch
+(git add smile.jpg) [hox, you need to copy/add it physically first]	== add a single file
+git add -i								== interactive adding
+git add -f Assets/LitJson.dll 						== add even though ignored
+git checkout -b branchName //origin/branchName [based on remote]	== create a new branch out of repo
+git branch								== check which branch you’re in
+git checkout master	//or branchName					== switch to master branch (or branchName branch), back to head
+git checkout 760ac7e							== switch to specific commit (in detached head state)
+git branch -d branchName //-D if resists				== delete branch (locally)
+git push origin branchName						== push branch into repo
+git diff branchName master						== view changes between two branches
+git merge branchName							== merge the branch (into current)
+
+
+git reflog								== get short ID's
+git log									== get Commit IDs
+git tag 1.00 1b2eId63ff							== create tag onto Commit ID 
+git checkout --smile.jpg						== replace local with latest from repo
+git checkout 4c4c3af MyFolder/smile.jpg					== replace local with the one from past commit (/branch)
+git checkout HEAD~2 Assets/Resources/Materials/F_GENERIC_LAMP.mat	== fetch file from the previous commit (one before newest)
+git rm smile.jpg	//git rm -f *.orig				== remove file from repo
+//rm -R Assets/*.orig //&& Assets/*/*.orig				== delete files ending with .orig
+git rm --cached mylogfile.log	//-r after cached for dir		== remove only remote
+git rm --cached `git ls-files -i -X .gitignore`				== remove according to .gitignore, use Git Bash
+git remote set-url origin git://new.url.here				== change remote origin
+git remote remove origin						== if you need to remove it after all
+git remote show origin							== shows which remote you have
+git branch -vv								== show branch name + latest commit + track
+
+git config --global user.name "Etunimi Sukunimi"			== config global username
+git config --global user.email "nimi@posti"				== config global email
+
+git config --global core.safecrlf true						== only convert line endings if it can be reverced
+git config --global core.autocrlf false					== saves some headache (dangerous with binary files)
+
+echo file.txt >> .gitignore	// folder/ - also *.txt			== exclude file from git
+git remote add backup ssh://server/etc-clone				== ??
+git init --bare								== ??
+git config --get remote.origin.url					== shows remote if integrity broken
+//note: to use ssh:’s and the git:’s you need proper ssh keys (that are also registered in BitBucket)
+//	otherwise, use https:
+
+//to reset to the remote branch and revert all local changes
+git fetch origin //git fetch --all					== download everything from remote
+git reset --hard origin/master	//(without fetch, re-do a commit)	== resets everything to how it is on remote
+git mergetool								== launch mergetool (KDiff) to resolve conflicts
+git difftool								== use a vimdiff to compare changes
+git diff //—-no-ext-diff						== show changes (from index) in console
+(git diff -cached)							== show changes between index and commit
+(git diff HEAD)								== show changes from commit
+git ls-files								== show tracked files
+git clean -xdn //WARNING: Permanently deletes, -should only show	== removes all untracked files
+git merge --abort							== revert to local (cancel merge)
+git rebase --abort
+
+git checkout --ours filename.c 						== merge with changes from local master
+git checkout --theirs filename.c 					== —||- from branch we are merging into
+git checkout -m filename.c 						== undo merge changes
+git add filename.c 							== add to commit
+git commit -m 	//use whichever (if theirs, then “git pull origin master” should work)
+git show | head								== show changes to head
+
+git merge branch1 branch2 						== make an octopus merge on current branch
+(git merge master branch1) //== git checkout branch1; git merge master	== bring master into branch1
+git merge -s ours obsoleteBranch 			== merge obsolete into current using “ours” merge strategy
+(git merge --no-commit branch1) 					== merge into current without auto-commit
+git merge -Xignore-space-change branch1					== merge while ignoring whitespace
+git merge -Xours branch1						== fake merge, with all conflicts taken from current
+
+git show :2:hello.rb > hello.ours.rb	//(:1 - base)			== create new file that contains your version of the file
+git show :3:hello.rb > hello.theirs.rb					== create new file that contains their version of the file
+dos2unix hello.theirs.rb						== converts whitespace and line-endings
+git merge-file -p \							== manually merges two files (with fixed whitespace) into one
+    hello.ours.rb hello.common.rb hello.theirs.rb > hello.rb
+git clean -f		//-n to preview					== removes extra files manually created after merge started
+(grep -lr '<<<<<<<' . | xargs git checkout --ours)	//--theirs	== takes current version for multiple conflicts		
+
+
+git branch -m <oldname> <newname>					== rename local branch
+git branch -m <newname>							== rename current local branch
+
+git reset HEAD~2	//--hard to affect the working directory	== remove two latest commits from current branch
+git reset --hard HEAD	//HEAD == commit to reset back to		== discard all uncommitted changes
+git reset HEAD~3 foo.cs							== revert to old version of specific file (stage for next)
+git clean -df								== remove unstaged files
+git push --force							== overwrite the remote (reset commits there as well)
+
+git reset Folder/Path/							== these two together cancel your changes to folder
+git clean -df Folder/Path/			//-n to preview
+
+git checkout HEAD~2	//two behind, or name the commit directly	== check out old commit in current branch
+
+git revert HEAD~3							== duplicate old commit to the front (in cur branch)
+
+git remote update origin --prune					== get's all of the new branches from remote
+
+git rebase master	//-i for interactive, need push --force if mast	== Integrate the master branch into current one
+
+
+//Standalone separate branch:
+Create a new Unity project (folder), open git shell, navigate to the new folder.
+git init					//make it a git repository (remember to copy old .gitignore)
+git remote add origin https://github.com/Group/Project.git	//designate it to existing project
+git branch -m New_Branch_Name			//rename the current project to the desired branch name
+git add .					//add all of the files in this new project to git
+git commit -m "Message"				//commit previously added files
+git push --set-upstream origin New_Branch_Name	//add the local project as a new remote branch to the repository
+//to get it :  after "git remote add"
+git fetch origin Remote_Branch_Name:Remote_Branch_Name	//latter is really local, but oh well (and remote can differ from origin)
+git checkout Remote_Branch_Name			//switches the local repo to the desired branch that has now been fetched
+
+//Transfer existing to new Project
+Create new Project on GitHub, open git shell, navigate to the existing folder
+git remote					//list remote repositories, should only have one ("origin")
+git remote remove origin			//removes old origin
+git remote add git remote add origin https://github.com/GroupBuilderOy/GB-Materials.git		//add new origin
+git branch -m master				//rename current active branch as master
+git push -u origin master			//upload onto master, and set local to follow remote (-u)
+//to add a branch
+git checkout -b newBranchName			//create new branch locally from with current contents
+git push --set-upstream origin newBranchName	//update the remote with a new branch as well
+git checkout master				//switch back to master
+
+
+
+//Windows setup
+//	http://sourceforge.net/projects/kdiff3/?source=typ_redirect
+ .git/config:
+[merge]
+    tool = kdiff3
+
+[mergetool "kdiff3"]
+    path = C:/Program Files/KDiff3/kdiff3.exe
+    keepBackup = false
+    trustExitCode = false
+//sometimes: path = C:\\Program Files (x86)\\KDiff3\\kdiff3.exe
+
+//KDiff3 Usage:
+	Leave most to auto, tranverse conflicts with double arrows (up/down), select base (old), local (current local) or remote (latest online)
+	with CTRL+1 - 3.
+
+//Resources
+https://www.atlassian.com/git/tutorials/resetting-checking-out-and-reverting/file-level-operations
+https://www.atlassian.com/git/tutorials/merging-vs-rebasing/conceptual-overview

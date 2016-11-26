@@ -1,0 +1,107 @@
+{\rtf1\ansi\ansicpg1252\deff0\nouicompat{\fonttbl{\f0\froman\fprq2\fcharset0 Helvetica;}{\f1\froman\fprq2\fcharset0 Liberation Serif;}}
+{\colortbl ;\red0\green0\blue255;}
+{\*\generator Riched20 10.0.10240}\viewkind4\uc1 
+\pard\nowidctlpar\tx566\tx1133\tx1700\tx2267\tx2834\tx3401\tx3968\tx4535\tx5102\tx5669\tx6236\tx6803\kerning1\f0\fs24\lang1035 ///\b\fs28 Unity code samples\b0\f1\fs24\par
+\f0 //\b escape exit\b0\f1\par
+\f0 if (Input.GetKeyDown(KeyCode.Escape)) \{\f1\par
+\f0\tab Application.Quit ();\f1\par
+\f0  \} \f1\par
+\f0\par
+\par
+//\b Example Unity WWW class (GET)\b0\f1\par
+\f0 public IEnumerator get() \{\f1\par
+\f0\tab WWW www = new WWW("{{\field{\*\fldinst{HYPERLINK http://exampleURL.com }}{\fldrslt{http://exampleURL.com\ul0\cf0}}}}\f0\fs24 ");  // Execute request\f1\par
+\f0\tab yield return www;\f1\par
+\f0\tab Debug.Log("Response is " + {{\field{\*\fldinst{HYPERLINK www.text }}{\fldrslt{www.text\ul0\cf0}}}}\f0\fs24 );  // Process response\f1\par
+\f0\}\f1\par
+\f0 public void getData() \{\f1\par
+\f0\tab StartCoroutine(get());\f1\par
+\f0\}\f1\par
+\f0\par
+//\b Example Unity WWW class (POST)\b0\f1\par
+\f0 public IEnumerator post() \{\f1\par
+\f0\tab string postDataStr= @"\{""hiscore"":\{""value"":100,""name"":""Max""\}\}";  // Literal string (JSON)\f1\par
+\f0\tab byte[] postData = System.Text.Encoding.ASCII.GetBytes(test);\f1\par
+\f0\tab Dictionary<string, string> headers = new Dictionary<string, string>();  // Set HTTP Headers\f1\par
+\f0\tab headers.Add("Content-Type", "application/json");\f1\par
+\f0\tab WWW www= new WWW("{{\field{\*\fldinst{HYPERLINK http://exampleUrl.com }}{\fldrslt{http://exampleUrl.com\ul0\cf0}}}}\f0\fs24 ", postData, headers);\f1\par
+\f0\tab yield return www;\f1\par
+\f0\}\f1\par
+\f0\par
+///\b Example Unity JSON parse\b0\f1\par
+\f0 // data format:\f1\par
+\f0 // [\{"value":1111, "name":"xxxx"\}, \{"value":2222, "name":"yyyy"\}]\f1\par
+\f0\par
+JsonData responseData = JsonMapper.ToObject({{\field{\*\fldinst{HYPERLINK www.text }}{\fldrslt{www.text\ul0\cf0}}}}\f0\fs24 );\f1\par
+\f0 for(int i = 0; i < responseData.Count; i++) \{\f1\par
+\f0\tab Debug.Log( responseData[i]["value"] + ", " + responseData[i]["name"] );\f1\par
+\f0\}\f1\par
+\f0\par
+//\b You can use "enabled" by itself in scripts\b0\f1\par
+\f0 function OnBecameVisible () \{\f1\par
+\f0     \tab enabled = true; \}\f1\par
+\f0\par
+//\b Getting a script from parent\b0\f1\par
+\f0 private RainManager manager;\f1\par
+\f0\tab manager = transform.parent.GetComponent.<RainManager> ();\f1\par
+\f0\par
+//\b Settings bounds\b0\f1\par
+\f0 private Bounds bounds;\f1\par
+\f0\tab bounds = new Bounds (Vector3 (transform.position.x, manager.minYPosition, transform.position.z),\f1\par
+\f0\tab\tab\tab      Vector3 (manager.areaSize * 1.35f, Mathf.Max (manager.areaSize, manager.areaHeight)  * 1.35f, manager.areaSize * 1.35f));\tab\f1\par
+\f0\par
+\par
+\par
+///\b\fs28 Unity Notes\b0\f1\fs24\par
+{\f0{\field{\*\fldinst{HYPERLINK https://docs.google.com/document/d/1qlihCR-PGsgBA_WsdQeurMTzwyr30PoQIqFPYG0pHak/edit?usp=sharing }}{\fldrslt{https://docs.google.com/document/d/1qlihCR-PGsgBA_WsdQeurMTzwyr30PoQIqFPYG0pHak/edit?usp=sharing\ul0\cf0}}}}\f1\fs24\par
+\par
+{{\field{\*\fldinst{HYPERLINK http://forum.unity3d.com/threads/scripts-useful-4-6-scripts-collection.264161/ }}{\fldrslt{http://forum.unity3d.com/threads/scripts-useful-4-6-scripts-collection.264161/\ul0\cf0}}}}\f1\fs24\par
+\f0\par
+\par
+//asset importing from Google Warehouse (SketchUp)\f1\par
+\f0 // {{\field{\*\fldinst{HYPERLINK http://www.gamasutra.com/blogs/JamieFristrom/20130530/193334/Rapid_Level_Creation_On_A_Budget_With_Google_Warehouse_And_Unity_Pro__No_Artist_Required.php }}{\fldrslt{http://www.gamasutra.com/blogs/JamieFristrom/20130530/193334/Rapid_Level_Creation_On_A_Budget_With_Google_Warehouse_And_Unity_Pro__No_Artist_Required.php\ul0\cf0}}}}\f1\fs24\par
+\f0 // {{\field{\*\fldinst{HYPERLINK http://www.sketchup.com/download/sketchup-pro/windows/thank-you }}{\fldrslt{http://www.sketchup.com/download/sketchup-pro/windows/thank-you\ul0\cf0}}}}\f1\fs24\par
+\f0\par
+>Export to .FBX > Use Unity's FBX Importer (recommended .skp > .dae)\f1\par
+\f0 & Static Batching (Unity Pro)\tab //or PlayUp(watch out for UV\rquote s, not req if Pro)|MeshBaker\f1\par
+\f0 -when importing, oft SketchUp 1 unit = 2cm, so scale factor 0.02\f1\par
+\f0 -generate colliders | mesh compression high (rare,problems) | optimize mesh\f1\par
+\f0 - | generate light map uv\rquote s | normals: import, tangents: calculate | split tangents\f1\par
+\f0 - | import materials |\~materials search: local materials folder\f1\par
+\f0 - |\~animations generation: store in root | wrap mode: default | split animations\f1\par
+\f0 - | keyframe reduction\f1\par
+\f0 >empty gameobject> model>prefab (automatic update upon re-export)\f1\par
+\f0 >object>Static (checkbox)(> children as well) - necessary for static batching & lightmaps\f1\par
+\f0 >if overlapping transparent parts>Transparent/Cutout shader\f1\par
+\f0 -consider baking the lightmaps (for individual objects/whole scene)\f1\par
+\f0 - shadow samples: 1000; ambient occlusion: 1; resolution: 5 texels / world unit\f1\par
+\f0 (>map textures to a textureatlas) [in SketchUp: Preferences>Applications>Gimp; \f1\par
+\f0\tab Paint Browser> find \lquote Colors in Model\rquote >right click material>Edit]\f1\par
+\f0\par
+\ldblquote I adjust the materials and shaders. For Energy Hook, so far, I\rquote ve been using the stock Unity toon shaders for ramp-lighting on stuff that I don\rquote t want to be shiny, and the stock reflective shader for windows and shiny things. (For outlining, I use Edge Detect Effect Normals from the Unity Pro post-processing shaders.) You\rquote d want to do your own things for your own look, of course.\rdblquote\f1\par
+\f0\par
+\par
+//Android Development\f1\par
+{\f0{\field{\*\fldinst{HYPERLINK http://developer.android.com/sdk/installing/studio.html }}{\fldrslt{http://developer.android.com/sdk/installing/studio.html\ul0\cf0}}}}\f1\fs24\par
+{\f0{\field{\*\fldinst{HYPERLINK http://www.oracle.com/technetwork/java/javase/downloads/index.html }}{\fldrslt{http://www.oracle.com/technetwork/java/javase/downloads/index.html\ul0\cf0}}}}\f1\fs24\par
+\f0 ( {{\field{\*\fldinst{HYPERLINK http://www.samsung.com/fi/support/usefulsoftware/KIES/ }}{\fldrslt{http://www.samsung.com/fi/support/usefulsoftware/KIES/\ul0\cf0}}}}\f0\fs24  ) (for Samsung phones)\f1\par
+\f0\par
+\par
+//Good plugins (pricey)\f1\par
+\f0 Shader Forge $90 ( {{\field{\*\fldinst{HYPERLINK https://www.assetstore.unity3d.com/en/#!/content/14147 }}{\fldrslt{https://www.assetstore.unity3d.com/en/#!/content/14147\ul0\cf0}}}}\f0\fs24  )\f1\par
+\f0 Animator Pro\f1\par
+\f0 Playmaker $95 ( {{\field{\*\fldinst{HYPERLINK https://www.assetstore.unity3d.com/en/#!/content/368 }}{\fldrslt{https://www.assetstore.unity3d.com/en/#!/content/368\ul0\cf0}}}}\f0\fs24  )\f1\par
+\f0 ProCore $150 ( {{\field{\*\fldinst{HYPERLINK https://www.assetstore.unity3d.com/en/#!/content/15447 }}{\fldrslt{https://www.assetstore.unity3d.com/en/#!/content/15447\ul0\cf0}}}}\f0\fs24  )\par
+(ProBuilder 2 $95 {{\field{\*\fldinst{HYPERLINK https://www.assetstore.unity3d.com/en/#!/content/3558 }}{\fldrslt{https://www.assetstore.unity3d.com/en/#!/content/3558\ul0\cf0}}}}\f0\fs24  )\f1\par
+\f0 MXD Bundle $50 ( {{\field{\*\fldinst{HYPERLINK https://www.assetstore.unity3d.com/en/?gclid=CI3FvqTNncQCFRMatAod43cAAg#!/content/5674 }}{\fldrslt{https://www.assetstore.unity3d.com/en/?gclid=CI3FvqTNncQCFRMatAod43cAAg#!/content/5674\ul0\cf0}}}}\f0\fs24  )\par
+Camera Tool $0 ( {{\field{\*\fldinst{HYPERLINK http://u3d.as/content/forge3d/camera-tool/9BD }}{\fldrslt{http://u3d.as/content/forge3d/camera-tool/9BD\ul0\cf0}}}}\f0\fs24  )\par
+LeanTween $0 ( {{\field{\*\fldinst{HYPERLINK https://www.assetstore.unity3d.com/en/#!/content/3595 }}{\fldrslt{https://www.assetstore.unity3d.com/en/#!/content/3595\ul0\cf0}}}}\f0\fs24  )\par
+Smart Localization Pro $30 ( {{\field{\*\fldinst{HYPERLINK https://www.assetstore.unity3d.com/en/#!/content/32055 }}{\fldrslt{https://www.assetstore.unity3d.com/en/#!/content/32055\ul0\cf0}}}}\f1\fs24  )\par
+GameDraw $45 ( {{\field{\*\fldinst{HYPERLINK https://www.assetstore.unity3d.com/en/#!/content/2811 }}{\fldrslt{https://www.assetstore.unity3d.com/en/#!/content/2811\ul0\cf0}}}}\f1\fs24  )\par
+Mega-Fiers ( {{\field{\*\fldinst{HYPERLINK https://www.assetstore.unity3d.com/en/#!/content/644 }}{\fldrslt{https://www.assetstore.unity3d.com/en/#!/content/644\ul0\cf0}}}}\f1\fs24  )\par
+Primitives Pro $15 ( {{\field{\*\fldinst{HYPERLINK https://www.assetstore.unity3d.com/en/#!/content/7382 }}{\fldrslt{https://www.assetstore.unity3d.com/en/#!/content/7382\ul0\cf0}}}}\f1\fs24  )\par
+Fracturing & Destruction $60 ( {{\field{\*\fldinst{HYPERLINK https://www.assetstore.unity3d.com/en/#!/content/9411 }}{\fldrslt{https://www.assetstore.unity3d.com/en/#!/content/9411\ul0\cf0}}}}\f1\fs24  )\par
+Full Inspector: Inspect Everything $65 ( {{\field{\*\fldinst{HYPERLINK https://www.assetstore.unity3d.com/en/#!/content/14913 }}{\fldrslt{https://www.assetstore.unity3d.com/en/#!/content/14913\ul0\cf0}}}}\f1\fs24  )\par
+\par
+}
+ 
