@@ -9,6 +9,16 @@ public class Temperature : MonoBehaviour {
 	//~Z 2016-11-26 | Should probably make a singleton of this too - unless we attach an individual one to each room.
 	//				Actually, that sounds smarter.
 
+	string _nodeId; //what to connect to
+	public string nodeId { public get { return _nodeId; } private set; }
+
+
+	public Temperature( string node )
+	{
+		_nodeId = node;
+
+	} //End.Temperature() - constructor
+
 	// Use this for initialization
 	void Start () {
 	
@@ -19,6 +29,108 @@ public class Temperature : MonoBehaviour {
 	
 	} //End.Update()
 } //End.Temperature{}
+
+/* Notes on API's
+
+Data for heating, water usage, and water cooler electricity usage
+Keila_utilities_semicolon.csv	(placed in Assets/Resources)[field separator ; and decimal ,]
+Data explanation:
+DomesticWater_m3 = Total water usage in the building. Unit cubic meter
+WarmTapWater_m3 = Usage of the warm water that comes from tap, Unit cubic meter
+DistrictHeating_kWh = Heating energy of the building. Unit kWh
+Electricity_of_cooling_machines_kWh = Electricity that cooling system uses. Unit kWh
+Total_Electricity_kWh = Total electricity consumption in the building. Unit kWh
+
+Live cencsors for Air Quality:
+https://hackathon.720.fi/nodes/
+
+Sample Data:
+{
+    "data": {
+        "nodes": [
+            {
+                "city": "Espoo",
+                "node_id": "0e34909f-f07f-417c-a667-bf7b12757eef",
+                "street": "Keilaniemi, Keilalahdentie",
+                "sensortypes": [
+                    "co2",
+                    "relative_humidity_percent",
+                    "temperature_celsius",
+                    "voc_ch2o_equiv"
+                ],
+                "country": "Finland",
+                "timezone": "Europe/Helsinki",
+                "area_name": "7. krs Tieto Oyj, Keilaniemi",
+                "node_name": "Avotila It\u00e4"
+            }, 
+            <... more ...>
+        },
+    "status": 200
+}
+
+
+https://hackathon.720.fi/nodes/<node_id>/measurements?from=<timestamp>&until=<timestamp>&aggregate=<granularity>
+junction_hackathon@720.fi / i<3python
+
+Sample Data:
+{
+    "data": {
+        "measurements": [
+            {
+                "record_time": "2016-11-23T00:00:00",
+                "sensors": {
+                    "co2": {
+                        "value_avg": 570.0,
+                        "value_max": 570.0,
+                        "value_min": 570.0,
+                        "value_stddev": 0.0
+                    },
+                    "relative_humidity_percent": {
+                        "value_avg": 31.0,
+                        "value_max": 31.0,
+                        "value_min": 31.0,
+                        "value_stddev": 0.0
+                    },
+                    "temperature_celsius": {
+                        "value_avg": 22.4461536407471,
+                        "value_max": 22.6,
+                        "value_min": 22.4,
+                        "value_stddev": 0.0877061365017857
+                    },
+                    "voc_ch2o_equiv": {
+                        "value_avg": 957.5,
+                        "value_max": 960.0,
+                        "value_min": 950.0,
+                        "value_stddev": 4.52267016866645
+                    }
+                }
+            },
+            <... more …>
+        ]
+    },
+    "status": 200
+}
+
+
+Data explanation:
+<node_id> is a UUID, which can be retrieved using the node API (see previous paragraph)
+<timestamp> is a timestamp in the format [YYYY]-[mm]-[dd]T[HH]:[MM]:[SS] (example: 2016-11-25T18:45:00)
+<granularity> defines the level of detail for the retrieved measurement aggregates. Possible values are: 
+- 1d (for 1-day aggregates)		[maximum of 93d]
+- 6h (for 6-hour aggregates)	[maximum of 32d]
+- 1h (for 1-hour aggregates)	[maximum of 8d]
+- 5m (for 5-minute aggregates)	[maximum of 2h]
+
+*/
+
+/* Idea outline
+Temperature Maintenance: 
+No heating, cooling or lights in the conference room until someone has booked it. The temperature of the building 
+(where people are present) to be maintained at 25 degrees.
+If you need the conference room then book it so that the temperature can be adjusted before the meeting.
+Sensors on each door will keep track of the number of people in the room and will be used to maintain the temperature 
+in the room by counting the number of people.
+*/
 
 /* Notes from the first night
    "# 1 prompt: arrange meeting?\n",
