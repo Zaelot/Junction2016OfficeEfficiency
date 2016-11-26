@@ -1,15 +1,11 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class Occupant : MonoBehaviour {
+/// <summary>
+/// Generic class for an occupant (usually person, but we should take pets and robots into account later).
+/// To track the users of the rooms (office workers, cleaners etc).
+/// </summary>
+public class Occupant {
 
-	// Use this for initialization
-	void Start () {
-	
-	}
-	
-	// Update is called once per frame
-	void Update () {
-	
-	}
-}
+
+} //End.Occupant{}
