@@ -83,7 +83,7 @@ public class Room { //crumbled under pressure, now Monobehaviour - nope, that do
 			roomNumber = number;
 	} //End.Room() - constructor
 
-	public Room()
+	public Room() //these didn't seem to work too well
 	{
 		Debug.Log( "Default room stats as initiation" );
 		roomName = "New room";

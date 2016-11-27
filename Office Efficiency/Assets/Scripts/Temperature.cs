@@ -12,7 +12,7 @@ public class Temperature : MonoBehaviour {
 	//				Actually, that sounds smarter.
 
 	string _nodeId; //what to connect to
-	public string nodeId { get { return _nodeId; } private set { _nodeId = value; } }
+	[SerializeField]public string nodeId { get { return _nodeId; } private set { _nodeId = value; } }
 	public float temperatureCurrent = 25f;
 	public float temperatureDesired = 25f;
 	public float temperatureMin = 10f; //minimum temperature of the room, to preserve the structure when not in use
@@ -32,13 +32,29 @@ public class Temperature : MonoBehaviour {
 			return room;
 		}//end.get
 		private set { room = value; }
-	}
+	} //end.assignedRoom
 
 
 	public Temperature( string node )
 	{
 		_nodeId = node;
+		temperatureCurrent = 25f;
+		temperatureDesired = 25f;
+		temperatureMin = 10f;
+		temperatureMax = 50f;
+		if (assignedRoom != null)
+			Debug.Log( "Temperature should be initialized." );
 	} //End.Temperature() - constructor
+
+	public void Initialize()
+	{
+		temperatureCurrent = 25f;
+		temperatureDesired = 25f;
+		temperatureMin = 10f;
+		temperatureMax = 50f;
+		if (assignedRoom != null)
+			Debug.Log( "Temperature should be initialized." );
+	} //End.Initialize()
 
 	// Use this for initialization
 //	void Start () {

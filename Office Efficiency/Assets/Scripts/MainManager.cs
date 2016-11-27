@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic; //for List<>
 using System; //for DateTime
 using UnityEngine.UI;
+using System.Linq;
 
 /// <summary>
 /// Main manager. Core element that ties together the program structure.
@@ -74,8 +75,22 @@ public class MainManager : MonoBehaviour {
 	{
 		for( int i = 0; i < 5; ++i ) {
 			occupants.Add( new Occupant() );
-			rooms.Add( new Room( i ) );
-		}
+			//rooms.Add( new Room( i ) );
+
+//			rooms.Add( new Room( new List<Occupant>().Add(occupants.Last), "Room " + i, i,
+//				GameObject.Instantiate( new GameObject("Room " + i) ), new List<RoomReservation>(),
+//				3 * i, new Temperature(), i ) );
+
+			var roomOccupants = new List<Occupant>();
+			roomOccupants.Add( occupants.Last() );
+			var roomName = "Room " + i;
+			var roomGo = new GameObject(roomName);
+			var temperature = roomGo.AddComponent<Temperature>();
+			var freshRoom = new Room( roomOccupants, roomName, i, roomGo, new List<RoomReservation>(), 3 * i, temperature, i );
+			roomGo.AddComponent<DisplayRoomStats>().thisRoom = freshRoom;
+			rooms.Add( freshRoom );
+			temperature.Initialize();
+		}//end.for
 	} //End.PopulateWithTestData()
 
 	string temperatureOutput = "Current temperature for room {0}  is {1}°C";
