@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System.Linq;
 
 /// <summary>
 /// Adjusts the temperature of the room based on the amount of current and projected occupants.
@@ -20,11 +21,13 @@ public class Temperature : MonoBehaviour {
 	public Room assignedRoom{ 
 		get{ 
 			if( room == null ) {
-				if( gameObject.GetComponent<Room>() != null )
-					room = gameObject.GetComponent<Room>();
-				else
+				//if( gameObject.GetComponent<Room>() != null ) //can't do this as this is not a MonoBehaviour
+					//room = gameObject.GetComponent<Room>();
+				//room = new Room();
+				//else
 					//room = gameObject.AddComponent<Room>();
-					Debug.LogWarning( "Somehow ended up missing the Room on this " + gameObject, gameObject );
+					//Debug.LogWarning( "Somehow ended up missing the Room on this " + gameObject, gameObject );
+				room = MainManager.Instance.rooms.First( r => r.roomGO == gameObject);
 			}
 			return room;
 		}//end.get
@@ -49,6 +52,7 @@ public class Temperature : MonoBehaviour {
 
 	public void SetTemperature( float temp )
 	{
+		Debug.Log( "Temperature setting" );
 		if (temperatureMin < temp && temp < temperatureMax)
 			temperatureDesired = temp;
 		else

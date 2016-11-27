@@ -54,7 +54,7 @@ public class MainManager : MonoBehaviour {
 		PopulateWithTestData();
 
 		if( textOutput == null )
-			textOutput = GameObject.Find("TextTitle").GetComponent<Text>();
+			textOutput = GameObject.Find("TextResult").GetComponent<Text>();
 	} //End.Start()
 	
 	// Update is called once per frame
@@ -109,11 +109,17 @@ public class MainManager : MonoBehaviour {
 		Debug.Log( "Renaming room with " + assignToRoom.roomName );
 		//roomGO.name = roomName;
 		var currentRoom = rooms[ rooms.IndexOf(assignToRoom) ];
+		currentRoom.InitiateRoom();
 		if( currentRoom != null && currentRoom.roomGO )
 			currentRoom.roomGO.name = currentRoom.roomName;
 		yield break;
 	} //End.DebugRoomNameChange() - coroutine
+
+	private IEnumerator SetUpRooms() {
+		yield break;
+	}
 } //End.MainManager{}
+
 
 
 /* Generic Unity notes:

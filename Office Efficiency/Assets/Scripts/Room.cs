@@ -50,6 +50,10 @@ public class Room { //crumbled under pressure, now Monobehaviour - nope, that do
 		GameObject room = null, //float temperature = 0f, Dictionary<DateTime, List<Occupant>> reservations = null )
 		List<RoomReservation> reservations = null, int capacity = 5, Temperature temp = null, int number = 0 )
 	{
+		Debug.Log( "Custom room stats as initiation" );
+		//if( occupants == null )
+			//Room();
+
 		if( !String.IsNullOrEmpty(name) )
 			roomName = name;
 		else
@@ -81,6 +85,7 @@ public class Room { //crumbled under pressure, now Monobehaviour - nope, that do
 
 	public Room()
 	{
+		Debug.Log( "Default room stats as initiation" );
 		roomName = "New room";
 		roomFloor = 0;
 		roomGuid = new Guid();
@@ -91,12 +96,16 @@ public class Room { //crumbled under pressure, now Monobehaviour - nope, that do
 		roomGO.AddComponent<DisplayRoomStats>().thisRoom = this;
 		//roomTemperature = roomGO.AddComponent<Temperature>();//25f;
 		temperature = roomGO.AddComponent<Temperature>();
+		//InitiateRoom();
 	} //End.Room() - constructor overload
 
 	public Room( int floor )
 	{
 		Debug.Log("Creating a new room " + floor);
 		new Room(); //hmm, looks iffy, hope it works
+		//if( roomGuid == Guid.Empty ) MainManager.Instance.DebugDelayedChange( this );//InitiateRoom();
+		//if( roomGuid == Guid.Empty ) InitiateRoom();
+		InitiateRoom();
 		roomFloor = floor;
 		roomName = "Room " + floor;
 		//roomGO.name = roomName;
@@ -104,6 +113,25 @@ public class Room { //crumbled under pressure, now Monobehaviour - nope, that do
 		//can't run a coroutine here, since not a monobehaviour class..
 		MainManager.Instance.DebugDelayedChange( this );
 	} //End.Room() - constructor overload
+
+	//no idea why this resists so much
+	public void InitiateRoom()
+	{
+		Debug.Log( "Initiating room stats" );
+		roomName = "New room";
+		roomFloor = 0;
+		roomGuid = new Guid();
+		roomOccupants = new List<Occupant>();
+		//		roomReservations = new Dictionary<DateTime, List<Occupant>>();
+		roomReservations = new List<RoomReservation>();
+		//if(!roomGO)
+		if(roomGO) GameObject.DestroyImmediate(roomGO);
+		roomGO = new GameObject( roomName );
+		//if( roomGO.GetComponent<DisplayRoomStats>() == null )
+			roomGO.AddComponent<DisplayRoomStats>().thisRoom = this;
+		//roomTemperature = roomGO.AddComponent<Temperature>();//25f;
+		temperature = roomGO.AddComponent<Temperature>();
+	} //End.InitiateRoom()
 
 
 

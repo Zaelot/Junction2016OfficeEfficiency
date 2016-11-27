@@ -43,7 +43,7 @@ public class DisplayRoomStats : MonoBehaviour {
 		roomCapacity = thisRoom.roomCapacity;
 		roomNumber = thisRoom.roomNumber;
 
-	}
+	} //End.Start()
 	
 
-}
+} //End.DisplayRoomStats{}
