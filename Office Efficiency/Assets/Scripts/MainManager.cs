@@ -32,8 +32,10 @@ public class MainManager : MonoBehaviour {
 
 	public List<Occupant> occupants;
 	public List<Room> rooms; //could probably host buildings as well. Personally would prefer if it was all based off BIM's.
-	public List<DateTime> reservations;
-	//Send push notification to participants" 1 hour before the reservation starts
+	//public List<DateTime> reservations;
+	public List<RoomReservation> reservations; //FIXME Z 2016-11-27 | Argh, totally need a better system
+	//TODO Send push notification to participants" 1 hour before the reservation starts
+	//TODO could send them with additional SMS through 46elks
 
 	public List<Occupant> occupantsOutside; //occupants that have left the building
 
@@ -51,11 +53,15 @@ public class MainManager : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update() {
-	
+		
 	} //End.Update()
 
-	public void SetTemperature()
+	public void SetTemperature( Room room, float temperature )
 	{
+		var indx = rooms.IndexOf( room );
+		rooms[indx].roomTemperature.SetTemperature( temperature );
+
+
 	} //End.SetTemperature()
 
 	private void PopulateWithTestData()

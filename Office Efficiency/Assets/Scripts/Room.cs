@@ -2,6 +2,7 @@
 using System.Collections;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 
 /// <summary>
@@ -15,14 +16,38 @@ public class Room {
 	public Guid roomGuid;
 	public List<Occupant> roomOccupants;
 	//public List<Occupant> roomOccupants { get; set; } //was considering private/public combo
-	public Dictionary<DateTime, List<Occupant>> roomReservations; //hmm, wonder how to include the ending time
+	//public Dictionary<DateTime, List<Occupant>> roomReservations; //hmm, wonder how to include the ending time
+	public List<RoomReservation> roomReservations; //new try
 	public GameObject roomGO;
-	public float roomTemperature; //current temperature
+	//public float roomTemperature; //current temperature - think this should be in the Temperature
 	//public DateTime roomReservationEnding; //when the current resrvation ends. Still wondering how to list this. :|
 	public TimeSpan roomAvailability; //active hours of the room
+	public int roomCapacity;
+	//public int roomNumber; //future proofing - I'll go with the name and guid for now.
+	private Temperature temperature;
+	public Temperature roomTemperature {
+		get{ 
+			if( temperature == null ) {
+				if( roomGO && roomGO.GetComponent<Temperature>() != null )
+					temperature = roomGO.GetComponent<Temperature>();
+				//else if( MainManager.Instance.rooms.First( r => r.roomGuid == roomGuid ) ) {
+				//~Z 2016-11-27 | starting to be too tired for this. don't even know what I'm doing here. >.<
+				else if( roomGO )
+					temperature = roomGO.AddComponent<Temperature> ();				
+			} 
+			return temperature;
+		}//end.get
+		set {
+			if( temperature == null )
+				temperature = value;
+		}
+	}//end.roomTemperature
+
+
 
 	public Room( List<Occupant> occupants, string name = "", int floor = 0, 
-		Dictionary<DateTime, List<Occupant>> reservations = null, GameObject room = null, float temperature = 0f )
+		GameObject room = null, //float temperature = 0f, Dictionary<DateTime, List<Occupant>> reservations = null )
+		List<RoomReservation> reservations = null, int capacity = 5, Temperature temp = null )
 	{
 		if( !String.IsNullOrEmpty(name) )
 			roomName = name;
@@ -34,15 +59,17 @@ public class Room {
 			roomOccupants = new List<Occupant>();
 		roomFloor = floor;
 		roomGuid = new Guid();
-		if( reservations != null )
+		if (reservations != null)
 			roomReservations = reservations;
 		else
-			roomReservations = new Dictionary<DateTime, List<Occupant>>();
+			roomReservations = new List<RoomReservation>();
+//			roomReservations = new Dictionary<DateTime, List<Occupant>>();
 		if( room )
 			roomGO = room;
 		else
 			roomGO = GameObject.Instantiate( new GameObject( roomName ) ); //I think just using new GameObject() is enough
-		roomTemperature = temperature;										// but this can be used for Resources.Load(prefab) 
+		roomTemperature = temp;											   // but this can be used for Resources.Load(prefab)
+		roomCapacity = capacity;
 	} //End.Room() - constructor
 
 	public Room()
@@ -51,9 +78,11 @@ public class Room {
 		roomFloor = 0;
 		roomGuid = new Guid();
 		roomOccupants = new List<Occupant>();
-		roomReservations = new Dictionary<DateTime, List<Occupant>>();
+//		roomReservations = new Dictionary<DateTime, List<Occupant>>();
+		roomReservations = new List<RoomReservation>();
 		roomGO = new GameObject( roomName );
-		roomTemperature = 25f;
+		//roomTemperature = roomGO.AddComponent<Temperature>();//25f;
+		temperature = roomGO.AddComponent<Temperature>();
 	} //End.Room() - constructor overload
 
 	public Room( int floor )
@@ -65,9 +94,32 @@ public class Room {
 	public static Room GetFreeRoomFor( int participating, DateTime starting, DateTime ending )
 	{
 		//TODO pull current existing rooms from MainManager, and check which one are free of reservations on time.
+		var trying = MainManager.Instance.rooms.First( r => r.roomCapacity > participating && r.IsRoomFree(starting, ending) );
+
+		return trying; //don't care if it came out null, need to check for thart on the receiving end.
+		//return new Room();
 	} //End.GetFreeRoomFor()
 
+	public bool IsRoomFree( DateTime starting, DateTime ending )
+	{
+//		if( this.roomReservations.ContainsKey() )
+		//if( roomReservations.First( r => r.timeStarting.Equals(starting) ) != null )
+		//occurs on the same date, and at the same time (whether it started before and ends after, 
+		//	or starts before the new one ends) || ~Z 2016-11-27 | hope this works >.<
+		if( roomReservations.First( r => (r.timeStarting.Date == starting.Date || r.timeEnding.Date == ending.Date ) && 
+			( (r.timeStarting <= starting && r.timeEnding >= ending) || 
+				(r.timeStarting >= starting && r.timeStarting <= ending) ) 
+		) != null )
+			return false;
+//		else if( roomAvailability. ) 
+//			return false;
+
+
+		return true;
+	} //End.IsRoomFree()
+
 } //End.Room{}
+
 
 /// <summary>
 /// Room reservation.
@@ -94,24 +146,26 @@ public class RoomReservation
 	//geez, wanted null for ending, but nope
 	public RoomReservation( List<Occupant> participants, DateTime starting, DateTime ending, Room room, int amountParticipating = 0 ) 
 	{
-		if( participants == null || participants.Count <= 0 || starting == null )
+		if( participants == null || participants.Count <= 0 ) //|| starting == null ) //apparently DateTime always has a default value
 			throw new Exception( "Can't make a reservation without all of the information" );
-		if( starting < DateTime.Now )
-			throw new Exception( "The reservation starting time already passed." );
+		//if( starting < DateTime.Now )
+		if( ending < DateTime.Now || starting > ending ) //don't actually care whether it already started or not, people can make ongoing reservations
+			throw new Exception( "The reservation ending time already passed." );
 		
 		participating = participants;
 		timeStarting = starting;
 		timeEnding = ending;
 		participatingAmount = amount;
+		//TODO ~Z 2016-11-27 | Make a check on whether the room is free during this time.
 		reserVariotionRoom = room; //guess it's good to have the room here as well, though this is mostly pulled from the Room item
 	} //End.RoomReservation() - constructor
 
 	//Just want a free room, don't care about which one.
 	public RoomReservation( List<Occupant> participants, DateTime starting, DateTime ending, int amountParticipating = 0 ) 
 	{
-		if( participants == null || participants.Count <= 0 || starting == null )
+		if( participants == null || participants.Count <= 0 ) // || starting == null )
 			throw new Exception( "Can't make a reservation without all of the information" );
-		if( starting < DateTime.Now )
+		if( starting < DateTime.Now || starting > ending )
 			throw new Exception( "The reservation starting time already passed." );
 
 		participating = participants;

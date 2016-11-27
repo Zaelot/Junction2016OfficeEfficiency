@@ -12,23 +12,48 @@ public class Temperature : MonoBehaviour {
 
 	string _nodeId; //what to connect to
 	public string nodeId { get { return _nodeId; } private set { _nodeId = value; } }
+	public float temperatureCurrent = 25f;
+	public float temperatureDesired = 25f;
+	public float temperatureMin = 10f; //minimum temperature of the room, to preserve the structure when not in use
+	public float temperatureMax = 50f; //maximum temperature of the room, to preserve the structure when not in use
+	private Room room;
+	public Room assignedRoom{ 
+		get{ 
+			if( room == null ) {
+				if( gameObject.GetComponent<Room>() != null )
+					room = gameObject.GetComponent<Room>();
+				else
+					//room = gameObject.AddComponent<Room>();
+					Debug.LogWarning( "Somehow ended up missing the Room on this " + gameObject, gameObject );
+			}
+			return room;
+		}//end.get
+		private set { room = value; }
+	}
 
 
 	public Temperature( string node )
 	{
 		_nodeId = node;
-
 	} //End.Temperature() - constructor
 
 	// Use this for initialization
 	void Start () {
-	
+		//TODO ~Z 2016-11-27 | make first data poll and set the current temperature
 	} //End.Start()
 	
 	// Update is called once per frame
 	void Update () {
-	
+		//TODO ~Z 2016-11-27 | pull time and check if any reservations need to send notifications
 	} //End.Update()
+
+	public void SetTemperature( float temp )
+	{
+		if (temperatureMin < temp && temp < temperatureMax)
+			temperatureDesired = temp;
+		else
+			Debug.LogWarningFormat( "Failed to set temperature({0}), as it was not within the allowed range for this room: {1}", temp, assignedRoom );
+	} //End.SetTemperature()
 } //End.Temperature{}
 
 /* Notes on API's
