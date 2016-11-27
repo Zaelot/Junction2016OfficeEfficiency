@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic; //for List<>
 using System; //for DateTime
+using UnityEngine.UI;
 
 /// <summary>
 /// Main manager. Core element that ties together the program structure.
@@ -38,6 +39,8 @@ public class MainManager : MonoBehaviour {
 	//TODO could send them with additional SMS through 46elks
 
 	public List<Occupant> occupantsOutside; //occupants that have left the building
+	public Text textOutput;
+
 
 	void Awake() {
 		Instance = this; //assigning the singleton (or well, destroying the extra)
@@ -49,6 +52,9 @@ public class MainManager : MonoBehaviour {
 		rooms = new List<Room>();
 
 		PopulateWithTestData();
+
+		if( textOutput == null )
+			textOutput = GameObject.Find("TextTitle").GetComponent<Text>();
 	} //End.Start()
 	
 	// Update is called once per frame
@@ -70,8 +76,43 @@ public class MainManager : MonoBehaviour {
 			occupants.Add( new Occupant() );
 			rooms.Add( new Room( i ) );
 		}
-	} //End.PopulateWithTestData()		
+	} //End.PopulateWithTestData()
 
+	string temperatureOutput = "Current temperature for room {0}  is {1}°C";
+	int simulatedTemperature = 15;
+	public void SimulatePolling()
+	{
+		//just something to debug with...
+		rooms[0].roomTemperature.ReceiveTemperatureData( (float)simulatedTemperature++ );
+		if( simulatedTemperature > 27 )
+			simulatedTemperature = 15;
+		textOutput.text = String.Format( temperatureOutput, rooms[0].roomName, simulatedTemperature );
+	} //End.SimulatePolling()
+
+	string temperatureSetting = "Adjusting temperature for room {0} to {1}°C";
+	float simulatedTemperaturePlan = 18f;
+	public void SimulateSettingTemperature()
+	{
+		SetTemperature( rooms[0], simulatedTemperaturePlan );
+		textOutput.text = String.Format( temperatureSetting, rooms [0].roomName, simulatedTemperaturePlan );
+	} //End.SimulateSettingTemperature()
+
+	public void DebugDelayedChange( Room roomToChange )
+	{
+		StartCoroutine( DebugRoomNameChange(roomToChange) );
+	} //End.DebugDelayedChange()
+
+	private IEnumerator DebugRoomNameChange( Room assignToRoom )
+	{
+		yield return new WaitForEndOfFrame();
+		yield return new WaitForFixedUpdate(); //should carry over to next frame
+		Debug.Log( "Renaming room with " + assignToRoom.roomName );
+		//roomGO.name = roomName;
+		var currentRoom = rooms[ rooms.IndexOf(assignToRoom) ];
+		if( currentRoom != null && currentRoom.roomGO )
+			currentRoom.roomGO.name = currentRoom.roomName;
+		yield break;
+	} //End.DebugRoomNameChange() - coroutine
 } //End.MainManager{}
 
 

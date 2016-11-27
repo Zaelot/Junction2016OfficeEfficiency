@@ -38,14 +38,14 @@ public class Temperature : MonoBehaviour {
 	} //End.Temperature() - constructor
 
 	// Use this for initialization
-	void Start () {
-		//TODO ~Z 2016-11-27 | make first data poll and set the current temperature
-	} //End.Start()
-	
-	// Update is called once per frame
-	void Update () {
-		//TODO ~Z 2016-11-27 | pull time and check if any reservations need to send notifications
-	} //End.Update()
+//	void Start () {
+//		//TODO ~Z 2016-11-27 | make first data poll and set the current temperature
+//	} //End.Start()
+//	
+//	// Update is called once per frame
+//	void Update () {
+//		//TODO ~Z 2016-11-27 | pull time and check if any reservations need to send notifications
+//	} //End.Update()
 
 	public void SetTemperature( float temp )
 	{
@@ -54,6 +54,15 @@ public class Temperature : MonoBehaviour {
 		else
 			Debug.LogWarningFormat( "Failed to set temperature({0}), as it was not within the allowed range for this room: {1}", temp, assignedRoom );
 	} //End.SetTemperature()
+
+	public void  ReceiveTemperatureData( float currentTemperatureReading )
+	{
+		//TODO ~Z 2016-11-27 | Do something more with the data (update values)
+		//TODO ~Z 2016-11-27 | using float? would be preferrable, and then nullcheck it
+		temperatureCurrent = currentTemperatureReading;
+	} //End.ReceiveTemperatureData()
+
+
 } //End.Temperature{}
 
 /* Notes on API's

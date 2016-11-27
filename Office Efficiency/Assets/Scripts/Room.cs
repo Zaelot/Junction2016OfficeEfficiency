@@ -1,8 +1,9 @@
 ﻿using UnityEngine;
 using System.Collections;
-using System;
-using System.Collections.Generic;
-using System.Linq;
+using System; //For Guid
+using System.Collections.Generic; //for Lists
+using System.Linq; //for FirstOrDefault etc Linq
+//using UnityEngine.Events; //for coroutines - nvm, not monobehaviour
 
 
 /// <summary>
@@ -10,7 +11,7 @@ using System.Linq;
 /// Instantiate these for the building as needed.
 /// </summary>
 /// <creator>@Zaelot at Junction2016</creator>
-public class Room {
+public class Room { //crumbled under pressure, now Monobehaviour - nope, that does not work for us
 	public string roomName;
 	public int roomFloor;
 	public Guid roomGuid;
@@ -23,7 +24,7 @@ public class Room {
 	//public DateTime roomReservationEnding; //when the current resrvation ends. Still wondering how to list this. :|
 	public TimeSpan roomAvailability; //active hours of the room
 	public int roomCapacity;
-	//public int roomNumber; //future proofing - I'll go with the name and guid for now.
+	public int roomNumber; //future proofing - I'll go with the name and guid for now.
 	private Temperature temperature;
 	public Temperature roomTemperature {
 		get{ 
@@ -47,7 +48,7 @@ public class Room {
 
 	public Room( List<Occupant> occupants, string name = "", int floor = 0, 
 		GameObject room = null, //float temperature = 0f, Dictionary<DateTime, List<Occupant>> reservations = null )
-		List<RoomReservation> reservations = null, int capacity = 5, Temperature temp = null )
+		List<RoomReservation> reservations = null, int capacity = 5, Temperature temp = null, int number = 0 )
 	{
 		if( !String.IsNullOrEmpty(name) )
 			roomName = name;
@@ -70,6 +71,12 @@ public class Room {
 			roomGO = GameObject.Instantiate( new GameObject( roomName ) ); //I think just using new GameObject() is enough
 		roomTemperature = temp;											   // but this can be used for Resources.Load(prefab)
 		roomCapacity = capacity;
+		//var tmp = roomGO.AddComponent<Room>();
+		//tmp = this;
+		if( MainManager.Instance.rooms != null )
+			roomNumber = MainManager.Instance.rooms.Count;
+		else
+			roomNumber = number;
 	} //End.Room() - constructor
 
 	public Room()
@@ -81,15 +88,24 @@ public class Room {
 //		roomReservations = new Dictionary<DateTime, List<Occupant>>();
 		roomReservations = new List<RoomReservation>();
 		roomGO = new GameObject( roomName );
+		roomGO.AddComponent<DisplayRoomStats>().thisRoom = this;
 		//roomTemperature = roomGO.AddComponent<Temperature>();//25f;
 		temperature = roomGO.AddComponent<Temperature>();
 	} //End.Room() - constructor overload
 
 	public Room( int floor )
 	{
+		Debug.Log("Creating a new room " + floor);
 		new Room(); //hmm, looks iffy, hope it works
 		roomFloor = floor;
+		roomName = "Room " + floor;
+		//roomGO.name = roomName;
+		//StartCoroutine( DebugRoomNameChange );
+		//can't run a coroutine here, since not a monobehaviour class..
+		MainManager.Instance.DebugDelayedChange( this );
 	} //End.Room() - constructor overload
+
+
 
 	public static Room GetFreeRoomFor( int participating, DateTime starting, DateTime ending )
 	{
