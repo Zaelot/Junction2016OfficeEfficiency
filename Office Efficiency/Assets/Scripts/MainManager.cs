@@ -73,6 +73,11 @@ public class MainManager : MonoBehaviour {
 
 	private void PopulateWithTestData()
 	{
+		occupants = new List<Occupant>();
+		rooms = new List<Room>();
+		reservations = new List<RoomReservation>();
+		occupantsOutside = new List<Occupant>();
+		
 		for( int i = 0; i < 5; ++i ) {
 			occupants.Add( new Occupant() );
 			//rooms.Add( new Room( i ) );
@@ -91,11 +96,13 @@ public class MainManager : MonoBehaviour {
 			rooms.Add( freshRoom );
 			temperature.Initialize();
 		}//end.for
+
+		Debug.Log( "Populated occupants with " + occupants.Count + " rooms with " + rooms.Count );
 	} //End.PopulateWithTestData()
 
 	string temperatureOutput = "Current temperature for room {0}  is {1}°C";
 	int simulatedTemperature = 15;
-	public void SimulatePolling()
+	public void SimulatePolling() //test function to be attached to UI elements
 	{
 		//just something to debug with...
 		rooms[0].roomTemperature.ReceiveTemperatureData( (float)simulatedTemperature++ );
@@ -106,7 +113,7 @@ public class MainManager : MonoBehaviour {
 
 	string temperatureSetting = "Adjusting temperature for room {0} to {1}°C";
 	float simulatedTemperaturePlan = 18f;
-	public void SimulateSettingTemperature()
+	public void SimulateSettingTemperature() //test function to be attached to UI elements
 	{
 		SetTemperature( rooms[0], simulatedTemperaturePlan );
 		textOutput.text = String.Format( temperatureSetting, rooms [0].roomName, simulatedTemperaturePlan );
@@ -130,9 +137,38 @@ public class MainManager : MonoBehaviour {
 		yield break;
 	} //End.DebugRoomNameChange() - coroutine
 
-	private IEnumerator SetUpRooms() {
+	private IEnumerator SetUpRooms() { //don't really member what this was for
 		yield break;
-	}
+	} //End.SetUpRooms() - coroutine
+
+	string roomReservation = "Reserved a room {0} from {1} to {2} for {3} people.";
+	public void SimulateRoomReserve() //test function to be attached to UI elements
+	{
+//		var participants = new List<Occupant>();
+//		participants.Add()
+		var reservingOccupants = new List<Occupant>();
+//		int count = occupants.Count;
+//		--count;
+		if( occupants.Any() && ((occupants.Count - 1)  > 0) ) {
+			reservingOccupants.Add( occupants.ElementAt(1) );
+			if( occupants.Count >= 3 )
+				reservingOccupants.Add( occupants.ElementAt( occupants.Count - 1 ) );
+		}
+		if( !reservingOccupants.Any() && occupants.Any() )
+			reservingOccupants.Add( occupants.FirstOrDefault() );
+		else
+			Debug.LogWarning ("Failed to find occupants");
+
+		var reservation = new RoomReservation( reservingOccupants, //new List<Occupant>{ occupants[1], occupants[3] }, 
+				DateTime.Now.AddMinutes(3d), DateTime.Now.AddHours(2d), 2 );
+		if( reservation == null ) { Debug.LogWarning("Failed to reserve a room."); return; }
+		if( reservations == null ) reservations = new List<RoomReservation>();
+		reservations.Add( reservation );
+		reservation.reserVariotionRoom.roomReservations.Add( reservation ); //definitely need a better logic here
+		Debug.LogFormat( roomReservation, reservation.reserVariotionRoom.roomName, reservation.timeStarting, 
+			reservation.timeEnding );
+		//rooms[1].
+	} //End.SimulateRoomReserve()
 } //End.MainManager{}
 
 

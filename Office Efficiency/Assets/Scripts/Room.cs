@@ -139,6 +139,8 @@ public class Room { //crumbled under pressure, now Monobehaviour - nope, that do
 	{
 		//TODO pull current existing rooms from MainManager, and check which one are free of reservations on time.
 		var trying = MainManager.Instance.rooms.First( r => r.roomCapacity > participating && r.IsRoomFree(starting, ending) );
+		if( trying == null )
+			Debug.LogWarning( "Didn't find any free rooms." );
 
 		return trying; //don't care if it came out null, need to check for thart on the receiving end.
 		//return new Room();
@@ -150,7 +152,8 @@ public class Room { //crumbled under pressure, now Monobehaviour - nope, that do
 		//if( roomReservations.First( r => r.timeStarting.Equals(starting) ) != null )
 		//occurs on the same date, and at the same time (whether it started before and ends after, 
 		//	or starts before the new one ends) || ~Z 2016-11-27 | hope this works >.<
-		if( roomReservations.First( r => (r.timeStarting.Date == starting.Date || r.timeEnding.Date == ending.Date ) && 
+		if( !roomReservations.Any() ) return true;
+		else if( roomReservations.First( r => (r.timeStarting.Date == starting.Date || r.timeEnding.Date == ending.Date ) && 
 			( (r.timeStarting <= starting && r.timeEnding >= ending) || 
 				(r.timeStarting >= starting && r.timeStarting <= ending) ) 
 		) != null )
