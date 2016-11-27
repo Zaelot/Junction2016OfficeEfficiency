@@ -4,6 +4,7 @@ using System.Collections;
 /// <summary>
 /// Sends a Summary of the collected data to supervisors. (Well, basically should store in a database.)
 /// </summary>
+/// <creator>@Zaelot at Junction2016</creator>
 public class Summary : MonoBehaviour {
 
 	// Use this for initialization

@@ -5,6 +5,7 @@ using System.Collections;
 /// Gamification of the energy saving behaviour.
 /// </summary>
 /// Effectively a separate app, but started the outline here anyways.
+/// <creator>@Zaelot at Junction2016</creator>
 public class Gamification : MonoBehaviour {
 
 	// Use this for initialization

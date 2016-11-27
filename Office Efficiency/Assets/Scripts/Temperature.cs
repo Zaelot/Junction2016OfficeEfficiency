@@ -4,13 +4,14 @@ using System.Collections;
 /// <summary>
 /// Adjusts the temperature of the room based on the amount of current and projected occupants.
 /// </summary>
+/// <creator>@Zaelot at Junction2016</creator>
 public class Temperature : MonoBehaviour {
 
 	//~Z 2016-11-26 | Should probably make a singleton of this too - unless we attach an individual one to each room.
 	//				Actually, that sounds smarter.
 
 	string _nodeId; //what to connect to
-	public string nodeId { public get { return _nodeId; } private set; }
+	public string nodeId { get { return _nodeId; } private set { _nodeId = value; } }
 
 
 	public Temperature( string node )
@@ -133,7 +134,7 @@ in the room by counting the number of people.
 */
 
 /* Notes from the first night
-   "# 1 prompt: arrange meeting?\n",
+    "# 1 prompt: arrange meeting?\n",
     "# 2 meeting time\n",
     "# 3 number of people\n",
     "# 4 before the meeting time automatic reminder to all participants to confirm their presence\n",

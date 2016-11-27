@@ -73,6 +73,23 @@ WWW www= new WWW("http://unity6.ipt.oamk.fi:3000/hiscores", postDataByte, header
 InvokeRepeating("LaunchProjectile", 2, 0.3F); //function, in seconds, repeatRate seconds
 CancelInvoke("LaunchProjectile");
 
+//Singleton
+static private CoreManager _coreManager;
+public static CoreManager Instance
+{
+	get {
+		if (_coreManager == null)
+			_coreManager = FindObjectOfType<CoreManager>(); 
+		return _coreManager;
+	}
+	private set {
+		if (_coreManager == null)
+			_coreManager = value;
+		else
+			Destroy(value);
+	}
+} //End.Instance
+
 
 //Notes
 Unity already supports MonoBehaviour derived inheritance hierarchies, allowing you to have base references that you drag-and-drop your specific component instances onto.

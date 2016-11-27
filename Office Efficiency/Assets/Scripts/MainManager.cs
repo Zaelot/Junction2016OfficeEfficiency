@@ -1,23 +1,71 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System.Collections.Generic; //for List<>
+using System; //for DateTime
 
 /// <summary>
 /// Main manager. Core element that ties together the program structure.
 /// </summary>
+/// <remarks>It'a very easy for this to turn into a God object. Be careful.</remarks>
+/// <creator>@Zaelot at Junction2016</creator>
 public class MainManager : MonoBehaviour {
 
-	public static MainManager Instance;
+	//TODO ~Z 2016.11.27 | Make UI for Room reservation prompt | While at it, make the logic too
+	//TODO ~Z 2016.11.27 | 
 
+	private static MainManager _mainManager; //Singleton. Enables us to call the values from this from everywhere else without
+	public static MainManager Instance //	passing an instance first.
+	{
+		get {
+			if (_mainManager == null) {
+				_mainManager = FindObjectOfType<MainManager> ();
+			}
+			return _mainManager;
+		}
+		private set {
+			if (_mainManager == null)
+				_mainManager = value;
+			else
+				Destroy(value);
+		}
+	} //End.Instance
+
+	public List<Occupant> occupants;
+	public List<Room> rooms; //could probably host buildings as well. Personally would prefer if it was all based off BIM's.
+	public List<DateTime> reservations;
+	//Send push notification to participants" 1 hour before the reservation starts
+
+	public List<Occupant> occupantsOutside; //occupants that have left the building
+
+	void Awake() {
+		Instance = this; //assigning the singleton (or well, destroying the extra)
+	} //End.Awake()
 
 	// Use this for initialization
-	void Start () {
-	
+	void Start() {
+		occupants = new List<Occupant>();
+		rooms = new List<Room>();
+
+		PopulateWithTestData();
 	} //End.Start()
 	
 	// Update is called once per frame
-	void Update () {
+	void Update() {
 	
 	} //End.Update()
+
+	public void SetTemperature()
+	{
+	} //End.SetTemperature()
+
+	private void PopulateWithTestData()
+	{
+		for( int i = 0; i < 5; ++i ) {
+			occupants.Add( new Occupant() );
+			rooms.Add( new Room( i ) );
+		}
+	} //End.PopulateWithTestData()		
+
 } //End.MainManager{}
 
 
@@ -63,4 +111,6 @@ http://freebiesbug.com/psd-freebies/ui-kits/
 Images:
 https://unsplash.com/
 https://www.pexels.com/
+Google magic (sur:fc):
+https://www.google.com/search?q=person&source=lnms&tbm=isch&tbs=sur:fc
 */

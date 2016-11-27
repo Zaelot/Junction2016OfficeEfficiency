@@ -4,6 +4,7 @@ using System.Collections;
 /// <summary>
 /// Parking logic. Categorizes new visitors as either employees or visitors, and assigns the latter parking spots.
 /// </summary>
+/// <creator>@Zaelot at Junction2016</creator>
 public class Parking : MonoBehaviour {
 
 	// Use this for initialization
